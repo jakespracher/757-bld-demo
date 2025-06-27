@@ -2,6 +2,7 @@ import { DeployButton } from "@/components/deploy-button";
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
 import { HaikuDisplay } from "@/components/haiku-display";
+import { TrafficStatus } from "@/components/traffic-status";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { hasEnvVars } from "@/lib/utils";
 import Link from "next/link";
@@ -22,8 +23,11 @@ export default function Home() {
           </div>
         </nav>
 
-        <div className="flex-1 flex flex-col gap-20 max-w-5xl p-5">
-          <HaikuDisplay />
+        <div className="flex-1 flex flex-col gap-20 max-w-6xl p-5">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <TrafficStatus />
+            <HaikuDisplay />
+          </div>
         </div>
 
         <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
