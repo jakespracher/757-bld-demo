@@ -1,4 +1,5 @@
 import { getTrafficStatus } from '@/app/api/traffic/route';
+import Link from 'next/link';
 
 export async function TrafficStatus() {
     try {
@@ -46,12 +47,12 @@ export async function TrafficStatus() {
                             </p>
                         </div>
                     </div>
-                    <a
+                    <Link
                         href="/"
                         className="mt-4 inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
                     >
                         Refresh Status
-                    </a>
+                    </Link>
                 </div>
             </div>
         );
@@ -69,12 +70,12 @@ export async function TrafficStatus() {
                             Error: {error instanceof Error ? error.message : 'Unknown error'}
                         </p>
                     </div>
-                    <a
+                    <Link
                         href="/"
                         className="mt-4 inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
                     >
                         Try Again
-                    </a>
+                    </Link>
                 </div>
             </div>
         );

@@ -1,8 +1,5 @@
 import { generateHaiku } from '@/app/api/haiku/route';
-
-interface HaikuResponse {
-    haiku: string;
-}
+import Link from 'next/link';
 
 export async function HaikuDisplay() {
     try {
@@ -18,12 +15,12 @@ export async function HaikuDisplay() {
                             {data.haiku}
                         </pre>
                     </div>
-                    <a
+                    <Link
                         href="/"
                         className="mt-4 inline-block px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
                     >
                         Generate New Haiku
-                    </a>
+                    </Link>
                 </div>
             </div>
         );
@@ -34,12 +31,12 @@ export async function HaikuDisplay() {
                 <p className="text-red-500 mb-4">
                     Error: {error instanceof Error ? error.message : 'Failed to fetch haiku'}
                 </p>
-                <a
+                <Link
                     href="/"
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
                 >
                     Try Again
-                </a>
+                </Link>
             </div>
         );
     }

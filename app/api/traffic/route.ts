@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export const runtime = 'edge';
 
@@ -13,7 +13,6 @@ export async function getTrafficStatus() {
         // HRBT coordinates (approximate)
         const lat = 36.9665;
         const lon = -76.3272;
-        const radius = 5000; // 5km radius around HRBT
 
         const url = `https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?key=${apiKey}&point=${lat},${lon}&unit=MPH&openLr=false&thickness=1&pre=0&post=0`;
 
@@ -66,7 +65,7 @@ export async function getTrafficStatus() {
 }
 
 // HTTP API route handler
-export async function GET(req: NextRequest) {
+export async function GET() {
     try {
         const result = await getTrafficStatus();
         return NextResponse.json(result);
