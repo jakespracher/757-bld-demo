@@ -1,15 +1,14 @@
-import { getTrafficStatus } from '@/app/api/traffic/route';
-import { generateHaiku } from '@/app/api/haiku/route';
+import { getOrCreateHaiku } from '@/app/api/haiku-store/route';
+import { RefreshButton } from './refresh-button';
 
-export async function TrafficHaiku() {
+interface TrafficHaikuProps {
+    forceRefresh?: boolean;
+}
+
+export async function TrafficHaiku({ forceRefresh = false }: TrafficHaikuProps) {
     try {
-        // Get traffic status first
-        const traffic = await getTrafficStatus();
-
-        console.log('Traffic status:', traffic.status); // Debug log
-
-        // Generate haiku based on traffic status
-        const haikuData = await generateHaiku(traffic.status);
+        // Get haiku from Supabase (with caching logic)
+        const data = await getOrCreateHaiku(forceRefresh);
 
         const getStatusColor = (status: string) => {
             switch (status) {
@@ -42,36 +41,34 @@ export async function TrafficHaiku() {
                 {/* Haiku Section */}
                 <div className="mb-16">
                     <pre className="whitespace-pre-wrap text-2xl md:text-3xl font-light text-slate-800 dark:text-slate-200 leading-relaxed">
-                        {haikuData.haiku}
+                        {data.haiku}
                     </pre>
                 </div>
 
                 {/* Traffic Status Section */}
                 <div className="border-t border-slate-200 dark:border-slate-700 pt-8">
-                    <div className={`text-2xl mb-4 ${getStatusColor(traffic.status)}`}>
-                        {getStatusIcon(traffic.status)}
+                    <div className={`text-2xl mb-4 ${getStatusColor(data.trafficStatus)}`}>
+                        {getStatusIcon(data.trafficStatus)}
                     </div>
                     <h2 className="text-lg font-light mb-2 capitalize text-slate-600 dark:text-slate-400">
-                        {traffic.status} traffic
+                        {data.trafficStatus} traffic
                     </h2>
-                    <p className="text-sm text-slate-500 dark:text-slate-500 mb-6">
-                        {traffic.description}
-                    </p>
-                    <div className="text-xs text-slate-400 dark:text-slate-500 space-y-1">
-                        <p>{traffic.currentSpeed} mph current • {traffic.freeFlowSpeed} mph free flow</p>
-                        <p>Updated {new Date(traffic.timestamp).toLocaleTimeString()}</p>
+                    <div className="text-xs text-slate-400 dark:text-slate-500 space-y-1 mb-6">
+                        <p>{data.currentSpeed} mph current • {data.freeFlowSpeed} mph free flow</p>
+                        <p>Updated {new Date(data.timestamp).toLocaleTimeString()}</p>
+                        {data.isCached && (
+                            <p className="text-xs text-slate-300 dark:text-slate-600">(cached)</p>
+                        )}
+                        {!data.storageEnabled && (
+                            <p className="text-xs text-amber-500 dark:text-amber-400">
+                                (storage not configured - run SQL migration)
+                            </p>
+                        )}
                     </div>
                 </div>
 
-                {/* Refresh Link */}
-                <div className="mt-12">
-                    <a
-                        href="/"
-                        className="text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
-                    >
-                        refresh
-                    </a>
-                </div>
+                {/* Refresh Button */}
+                <RefreshButton />
             </div>
         );
     } catch (error) {
@@ -92,14 +89,7 @@ export async function TrafficHaiku() {
                     </p>
                 </div>
 
-                <div className="mt-12">
-                    <a
-                        href="/"
-                        className="text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
-                    >
-                        try again
-                    </a>
-                </div>
+                <RefreshButton />
             </div>
         );
     }
