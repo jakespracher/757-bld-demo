@@ -15,7 +15,7 @@ export async function getTrafficStatus() {
         const lon = -76.3272;
         const radius = 5000; // 5km radius around HRBT
 
-        const url = `https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?key=${apiKey}&point=${lat},${lon}&unit=KMPH&openLr=false&thickness=1&pre=0&post=0`;
+        const url = `https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?key=${apiKey}&point=${lat},${lon}&unit=MPH&openLr=false&thickness=1&pre=0&post=0`;
 
         const response = await fetch(url);
 
