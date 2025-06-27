@@ -1,4 +1,4 @@
-import { generateHaiku } from '@/app/api/haiku/route';
+import { generateHaiku } from '@/lib/haiku-generator';
 import Link from 'next/link';
 
 export async function HaikuDisplay() {

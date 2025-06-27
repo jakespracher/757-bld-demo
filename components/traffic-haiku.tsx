@@ -1,4 +1,4 @@
-import { getOrCreateHaiku } from '@/app/api/haiku-store/route';
+import { getOrCreateHaiku } from '@/lib/haiku-store';
 import { RefreshButton } from './refresh-button';
 
 interface TrafficHaikuProps {

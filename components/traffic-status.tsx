@@ -1,4 +1,4 @@
-import { getTrafficStatus } from '@/app/api/traffic/route';
+import { getTrafficStatus } from '@/lib/traffic-status';
 import Link from 'next/link';
 
 export async function TrafficStatus() {
