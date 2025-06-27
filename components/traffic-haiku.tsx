@@ -14,62 +14,62 @@ export async function TrafficHaiku() {
         const getStatusColor = (status: string) => {
             switch (status) {
                 case 'heavy':
-                    return 'bg-red-100 border-red-300 text-red-800 dark:bg-red-900 dark:border-red-700 dark:text-red-200';
+                    return 'text-red-600 dark:text-red-400';
                 case 'moderate':
-                    return 'bg-yellow-100 border-yellow-300 text-yellow-800 dark:bg-yellow-900 dark:border-yellow-700 dark:text-yellow-200';
+                    return 'text-amber-600 dark:text-amber-400';
                 case 'clear':
-                    return 'bg-green-100 border-green-300 text-green-800 dark:bg-green-900 dark:border-green-700 dark:text-green-200';
+                    return 'text-emerald-600 dark:text-emerald-400';
                 default:
-                    return 'bg-gray-100 border-gray-300 text-gray-800 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-200';
+                    return 'text-slate-600 dark:text-slate-400';
             }
         };
 
         const getStatusIcon = (status: string) => {
             switch (status) {
                 case 'heavy':
-                    return '🚗💨'; // Car with speed lines
+                    return '●'; // Simple dot
                 case 'moderate':
-                    return '🚗'; // Car
+                    return '●'; // Simple dot
                 case 'clear':
-                    return '🛣️'; // Road
+                    return '●'; // Simple dot
                 default:
-                    return '❓'; // Question mark
+                    return '●'; // Simple dot
             }
         };
 
         return (
-            <div className="text-center py-8">
-                <div className="max-w-2xl mx-auto">
-                    <h1 className="text-4xl font-bold mb-8">HRBT Traffic Haiku</h1>
+            <div className="text-center max-w-2xl mx-auto">
+                {/* Haiku Section */}
+                <div className="mb-16">
+                    <pre className="whitespace-pre-wrap text-2xl md:text-3xl font-light text-slate-800 dark:text-slate-200 leading-relaxed">
+                        {haikuData.haiku}
+                    </pre>
+                </div>
 
-                    {/* Haiku Section */}
-                    <div className="mb-8">
-                        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-8 shadow-sm">
-                            <pre className="whitespace-pre-wrap text-2xl font-mono text-gray-800 dark:text-gray-200 leading-relaxed">
-                                {haikuData.haiku}
-                            </pre>
-                        </div>
+                {/* Traffic Status Section */}
+                <div className="border-t border-slate-200 dark:border-slate-700 pt-8">
+                    <div className={`text-2xl mb-4 ${getStatusColor(traffic.status)}`}>
+                        {getStatusIcon(traffic.status)}
                     </div>
-
-                    {/* Traffic Status Section */}
-                    <div className={`border-2 rounded-lg p-6 ${getStatusColor(traffic.status)}`}>
-                        <div className="text-4xl mb-4">{getStatusIcon(traffic.status)}</div>
-                        <h2 className="text-2xl font-semibold mb-2 capitalize">{traffic.status} Traffic</h2>
-                        <p className="mb-4 text-lg">{traffic.description}</p>
-                        <div className="text-sm space-y-2">
-                            <p><strong>Current Speed:</strong> {traffic.currentSpeed} mph</p>
-                            <p><strong>Free Flow Speed:</strong> {traffic.freeFlowSpeed} mph</p>
-                            <p className="text-xs opacity-75">
-                                Last updated: {new Date(traffic.timestamp).toLocaleTimeString()}
-                            </p>
-                        </div>
+                    <h2 className="text-lg font-light mb-2 capitalize text-slate-600 dark:text-slate-400">
+                        {traffic.status} traffic
+                    </h2>
+                    <p className="text-sm text-slate-500 dark:text-slate-500 mb-6">
+                        {traffic.description}
+                    </p>
+                    <div className="text-xs text-slate-400 dark:text-slate-500 space-y-1">
+                        <p>{traffic.currentSpeed} mph current • {traffic.freeFlowSpeed} mph free flow</p>
+                        <p>Updated {new Date(traffic.timestamp).toLocaleTimeString()}</p>
                     </div>
+                </div>
 
+                {/* Refresh Link */}
+                <div className="mt-12">
                     <a
                         href="/"
-                        className="mt-6 inline-block px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-lg"
+                        className="text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
                     >
-                        Refresh
+                        refresh
                     </a>
                 </div>
             </div>
@@ -77,22 +77,27 @@ export async function TrafficHaiku() {
     } catch (error) {
         console.error('Traffic haiku error:', error);
         return (
-            <div className="text-center py-8">
-                <div className="max-w-2xl mx-auto">
-                    <h1 className="text-4xl font-bold mb-8">HRBT Traffic Haiku</h1>
-                    <div className="bg-gray-100 border-2 border-gray-300 rounded-lg p-8 dark:bg-gray-900 dark:border-gray-700">
-                        <div className="text-4xl mb-4">⚠️</div>
-                        <h2 className="text-2xl font-semibold mb-4">Service Unavailable</h2>
-                        <p className="mb-4">Unable to fetch traffic data or generate haiku</p>
-                        <p className="text-sm text-red-600 dark:text-red-400">
-                            Error: {error instanceof Error ? error.message : 'Unknown error'}
-                        </p>
-                    </div>
+            <div className="text-center max-w-2xl mx-auto">
+                <div className="mb-16">
+                    <pre className="whitespace-pre-wrap text-2xl md:text-3xl font-light text-slate-800 dark:text-slate-200 leading-relaxed">
+                        Unable to fetch
+                        traffic data at this time
+                        please try again
+                    </pre>
+                </div>
+
+                <div className="border-t border-slate-200 dark:border-slate-700 pt-8">
+                    <p className="text-sm text-slate-500 dark:text-slate-500">
+                        Error: {error instanceof Error ? error.message : 'Unknown error'}
+                    </p>
+                </div>
+
+                <div className="mt-12">
                     <a
                         href="/"
-                        className="mt-6 inline-block px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-lg"
+                        className="text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
                     >
-                        Try Again
+                        try again
                     </a>
                 </div>
             </div>
